@@ -35,4 +35,24 @@ public class MySkillTree : MonoBehaviour
             openableNodes[randIndex].gameObject.GetComponent<Canvas>().enabled = true;
         }
     }
+
+    public void GraftBranch(UI_TreeNode sourceNode, UI_TreeNode targetNode)
+    {
+        // 자식 노드 연결
+        var childList = new List<Canvas>(targetNode.childrenNode);
+        childList.Add(sourceNode.GetComponent<Canvas>());
+        targetNode.childrenNode = childList.ToArray();
+
+        // 부모 노드 설정
+        sourceNode.parentNode = targetNode.GetComponent<Canvas>();
+
+        // 현재 트리에도 등록 (중복 등록 방지)
+        if (!ui_TreeNodes.Contains(sourceNode))
+            ui_TreeNodes.Add(sourceNode);
+
+        // 조건에 따라 활성화 가능 여부 갱신
+        if (targetNode.GetComponent<Canvas>().enabled)
+            sourceNode.isCanOpen = true;
+    }
+
 }
